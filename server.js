@@ -20,6 +20,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mernauth', {
 
 //import routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 //app middlewares
 app.use(morgan('dev'));
@@ -31,6 +32,7 @@ if (process.env.NODE_ENV = 'dev') {
 
 //middleware
 app.use('/api/', authRoutes);
+app.use('/api/', userRoutes);
 
 
 
