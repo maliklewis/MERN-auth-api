@@ -33,7 +33,7 @@ exports.update = (req, res) => {
       if (password) {
           if (password.length < 6) {
             return res.status(400).json({
-                error: 'Name is required'
+                error: 'Password is not valid'
             });
           } else {
             user.password = password;

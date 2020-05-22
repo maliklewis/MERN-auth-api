@@ -75,6 +75,7 @@ exports.accountActivation = (req, res) => {
         return res.json({
             message: 'No token, please try again'
         })
+        
     }
 };
 
