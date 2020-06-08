@@ -26,7 +26,7 @@ const userRoutes = require('./routes/user');
 //app middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-//app.use(cors()); //overrides cors errors in the browers *thank god*
+app.use(cors()); //overrides cors errors in the browers *thank god*
 if (process.env.NODE_ENV = 'development') {
     app.use(cors({origin: `http://localhost:3000`})); //react front end port to allow to connect to port 8000
 }
