@@ -31,7 +31,7 @@ if (process.env.NODE_ENV = 'development') {
     app.use(cors({origin: `http://localhost:3000`})); //react front end port to allow to connect to port 8000
 }
 if (process.env.NODE_ENV != 'development') {
-    app.use(cors({origin: `http://68.183.207.128/api`})); //react front end port to allow to connect to port 8000
+    app.use(cors({origin: `http://www.maliklewis.ca`})); //react front end port to allow to connect to port 8000
 }
 
 //React middleware
