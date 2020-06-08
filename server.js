@@ -30,13 +30,11 @@ app.use(bodyParser.json());
 if (process.env.NODE_ENV = 'development') {
     app.use(cors({origin: `http://localhost:3000`})); //react front end port to allow to connect to port 8000
 }
-if (process.env.NODE_ENV !== 'development') {
-    app.use(cors({origin: `http://www.maliklewis.ca`})); //react front end port to allow to connect to port 8000
-}
 
 //React middleware
 //app.use(compression());
 if (process.env.NODE_ENV === 'production') {
+    app.use(cors({origin: `http://www.maliklewis.ca`}));
     app.use(express.static(path.join(__dirname, 'build')));
  
     app.get('*', function(req, res) {
