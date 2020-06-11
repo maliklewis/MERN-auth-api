@@ -1,6 +1,7 @@
 const User = require('../models/user');
 
 exports.read = (req, res) => {
+    console.log('got here')
     const userID = req.params.id;
     User.findById(userID).exec((err, user) =>{
         if (err || !user) {
@@ -10,7 +11,7 @@ exports.read = (req, res) => {
         }
         user.hashed_password = undefined;
         user.salt = undefined;
-        res.status(200).json(user);
+        res.json(user);
     });
 };
 
@@ -33,7 +34,7 @@ exports.update = (req, res) => {
       if (password) {
           if (password.length < 6) {
             return res.status(400).json({
-                error: 'Password is not valid'
+                error: 'Password must be six characters long'
             });
           } else {
             user.password = password;
@@ -49,10 +50,7 @@ exports.update = (req, res) => {
           }
           updatedUser.hashed_password = undefined;
           updatedUser.salt = undefined;
-          res.status(200).json({
-            message: "user " + updatedUser.name + " updated",  
-            updatedUser
-        });
-      })
+          res.json(updatedUser);
+      });
   });
 };
