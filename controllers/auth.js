@@ -2,6 +2,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
 const expressJwt = require('express-jwt');
+const _ = require('lodash');
 const {OAuth2Client} = require('google-auth-library');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -22,22 +23,24 @@ exports.signup = (req, res) => {
             to: email,
             subject:`Account activation link`,
             html: `
-                <h2>Please use the following link to activate your account: </h2>
+                <h2>Please use the following link to reset your password: </h2>
                 <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
                 <hr />
                 <p>This email may contain sensitive information, and is not monitored. Please do not reply to this email.</p>
                 <p>${process.env.CLIENT_URL}</p>
             `
         }
-        sgMail.send(emailData).then(sent => {
+        sgMail.send(emailData)
+        .then(sent => {
             //console.log('SIGNUP EMAIL SENT', sent)
             res.json({
                 message: `Email has been sent to ${email}. Follow the instructions to activate your account`
             })
-            .catch((error) => {
-                console.log(error)
-            })
-        });
+            
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     });
 
 };
@@ -168,6 +171,101 @@ exports.googleLogin = (req, res) => {
         }
     })
 }
+
+exports.forgotPassword = (req, res) => {
+    const {email} = req.body;
+    User.findOne({email}, (err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User with that email does not exist'
+            })
+        }
+        const token = jwt.sign({_id: user._id, name: user.name}, process.env.JWT_RESET_PASSWORD, {expiresIn: '10m'}); 
+
+        const emailData = {
+            from: process.env.EMAIL_FROM,
+            to: email,
+            subject:`Parallel password assistance`,
+            html: `
+                <h2>Please use the following link to reset your password: </h2>
+                <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+                <hr />
+                <p>This email may contain sensitive information, and is not monitored. Please do not reply to this email.</p>
+                <p>${process.env.CLIENT_URL}</p>
+            `
+        };
+
+        return user.updateOne({reset_link: token}, (err, success) =>{
+            if (err) {
+                return res.status(400).json({
+                    error: 'Database connection error for user password forget request'
+                });
+            }
+            else {
+                sgMail.send(emailData)
+                .then(sent => {
+                    //console.log('SIGNUP EMAIL SENT', sent)
+                    res.json({
+                        message: `Email has been sent to ${email}. Follow the instructions to reset your password`
+                    })
+                })
+                .catch((error) => {
+                    return res.json({
+                        message: err.message
+                    });
+                });
+            }
+        });
+    });
+};
+
+exports.resetPassword = (req, res) => {
+    const {reset_link, newPassword} = req.body;
+
+    if(reset_link) {
+        jwt.verify(reset_link, process.env.JWT_RESET_PASSWORD, function(err, decoded) {
+            if (err) {
+                return res.status(400).json({
+                    error: 'Expired reset link, please try again.'
+                });
+            }
+            User.findOne({reset_link}, (err, user) => {
+                if (err || !user) {
+                    return res.status(400).json({
+                        error: 'Its us not you..Please try again later'
+                    });
+                }
+                const updatedFields = {
+                    password: newPassword,
+                    reset_link: ''
+                }
+                user = _.extend(user, updatedFields);
+
+                user.save((err, result) => {
+                    if (err) {
+                        return res.status(400).json({
+                            error: 'Error updating user password. Please try again'
+                        });
+                    }
+                    res.json({
+                        message: `Password updated successfully!`
+                    });
+                });
+            });
+        });
+    }
+    else {
+        return res.status(400).json({
+            error: 'Invalid link. Please try again'
+        });
+    }
+};
+
+
+
+
+
+
 
 
 
