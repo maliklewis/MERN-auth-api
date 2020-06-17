@@ -22,6 +22,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/mernauth', {
 //import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const locationRoutes = require('./routes/location');
 
 //app middlewares
 app.use(morgan('dev'));
@@ -37,8 +38,7 @@ app.use(cors()); //overrides cors errors in the browers *thank god*
 //middleware
 app.use('/api/', authRoutes);
 app.use('/api/', userRoutes);
-
-
+app.use('/api', locationRoutes);
 
 
 app.listen(port, () => {

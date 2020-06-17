@@ -21,6 +21,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.12",
     "morgan": "^1.10.0",
-    "nodemon": "^1.19.4"
+    "node-geocoder": "^3.27.0",
+    "nodemon": "^1.19.4",
+    "opencage-api-client": "^0.7.1"
   }
 }
