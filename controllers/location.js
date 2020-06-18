@@ -3,7 +3,7 @@ const opencage = require('opencage-api-client');
 
 exports.createLocation = (req, res) => {
     const {province, city, address, lot_size, lot_type} = req.body;
-    let geolocation = [];
+    let lng, lat = 0;
 
     opencage.geocode({q: address})
     .then(data => {
@@ -11,9 +11,13 @@ exports.createLocation = (req, res) => {
         if (data.status.code == 200) {
           if (data.results.length > 0) {
             var place = data.results[0];
-            console.log(place.formatted);
+            //console.log(place.formatted);
+            //console.log(place.geometry);
+            //mapPoint = place.geometry.lng, place.geometry.lat;
+            lng = place.geometry.lng;
+            lat = place.geometry.lat;
+            //console.log(mapPoint);
             console.log(place.geometry);
-            geolocation = [place.geometry.lat, place.geometry.lng];
             //console.log(place.annotations.timezone.name);
           }
         } else if (data.status.code == 402) {
@@ -28,8 +32,9 @@ exports.createLocation = (req, res) => {
         console.log('error', error.message);
     });
 
-    const location = new Location({province, city, address, lot_size, lot_type, geolocation: {cordinates: geolocation}});
+    const location = new Location({province, city, address, lot_size, lot_type, geolocation: {coordinates: {lng, lat}}});
     console.dir(location);
+    console.log(location);
     location.save((err, location) =>{
         if (err){
             console.log('SAVE LOCATION ERROR: ', err)

@@ -30,14 +30,9 @@ const locationSchema = new mongoose.Schema({
     geolocation: {
         type: {
             type: String,
-            enum: ['Point'],
-            default: 'Point',
-            required: true
+            default: 'Point'
         },
-        coordinates: {
-            type: [Number],
-            required: true
-        }
+        coordinates: [Number]
     }
 }, {timestamps: true});
 
