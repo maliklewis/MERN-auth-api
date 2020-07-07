@@ -46,7 +46,7 @@ exports.signup = (req, res) => {
 };
 
 exports.accountActivation = (req, res) => {
-    const {token} = req.body
+    const {token} = req.body;
 
     if (token) {
         //token includes secret key, so checking if they match
