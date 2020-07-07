@@ -9,10 +9,6 @@ exports.locationCreationValidator = [
     .not()
     .isEmpty()
     .withMessage('City is required'),
-    check('city')
-    .not()
-    .isEmpty()
-    .withMessage('City is required'),
     check('address')
     .not()
     .isEmpty()
