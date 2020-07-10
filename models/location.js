@@ -26,11 +26,13 @@ const locationSchema = new mongoose.Schema({
         required: true,
         default: 'Outdoor'
     },
+    owner_id: String,
     geolocation: {
         type: {
             type: String, // Don't do `{ location: { type: String } }`
             enum: ['Point'], // 'location.type' must be 'Point'
-            required: true
+            required: true,
+            default: 'Point'
           },
           coordinates: {
             type: [Number],
@@ -38,35 +40,5 @@ const locationSchema = new mongoose.Schema({
           }
     }
 }, {timestamps: true});
-
-//virtual
-// locationSchema.virtual('address')
-// .set(function(address) {
-//     this._address = address;
-//     this.geolocation = this.makeGeolocation(address);
-// })
-// .get(function(){
-//     return this.geolocation;
-// })
-
-// //methods
-// const options = {
-//     provider: 'google'
-// }
-
-// locationSchema.methods = {
-//     makeGeolocation: function(address) {
-//         const geocoder = Nodegeocoder(options);
-
-//         // Or using Promise
-//         geocoder.geocode(address)
-//         .then(function(res) {
-//         console.log(res);
-//         })
-//         .catch(function(err) {
-//         console.log(err);
-//         });
-//     }
-// }
 
 module.exports = mongoose.model('Location', locationSchema)

@@ -1,7 +1,6 @@
 const User = require('../models/user');
 
 exports.read = (req, res) => {
-    console.log('got here')
     const userID = req.params.id;
     User.findById(userID).exec((err, user) =>{
         if (err || !user) {

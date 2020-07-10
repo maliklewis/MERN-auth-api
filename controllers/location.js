@@ -1,13 +1,7 @@
 const Location = require('../models/location');
-const opencage = require('opencage-api-client');
-var NodeGeocoder = require('node-geocoder');
+const User = require('../models/user');
 //import {geolocation} from '../config';
 let {geolocation} = require('../config');
-
-var geocoder = NodeGeocoder({
-            provider: 'opencage',
-            apiKey: process.env.OCD_API_KEY
-          });
 
 // function geolocation(address) {
 //     var geocoder = NodeGeocoder({
@@ -22,20 +16,30 @@ var geocoder = NodeGeocoder({
 
 exports.createLocation = (req, res) => {
     const {province, city, address, lot_size, lot_type} = req.body;
-    // let coordinates = geolocation(address);
+    var coordinates = []
+    console.log(req.user._id)
     // console.log(geolocation(address));
-    let coordinates = geolocation(address);
-    console.dir(coordinates);
-    //const location = new Location({province, city, address, lot_size, lot_type, geolocation: {coordinates}});
-    // location.save((err, location) => {
-    //     if (err){
-    //         console.log('SAVE LOCATION ERROR: ', err)
-    //         return res.status(401).json({
-    //             error: 'Error saving location to database, please try to create location again'
-    //         });
-    //     }
-    //     return res.json({
-    //         message: 'Success, location created!',
-    //     })
-    // });
+    geolocation(address).then((newCoords) => {
+        coordinates = [newCoords[0].latitude, newCoords[0].longitude]
+        const location = new Location({province, city, address, lot_size, lot_type, owner_id: req.user._id, geolocation: {coordinates}});
+        location.save((err, location) => {
+            if (err){
+                console.log('SAVE LOCATION ERROR: ', err)
+                return res.status(401).json({
+                    error: 'Error saving location to database, please try to create location again'
+                });
+            }
+            return res.json({
+                message: 'Success, location created!',
+                location: location
+            })
+        });
+    });
+    //coordinates = coordinates.then();
+    //console.dir(coordinates);
+    
 };
+
+exports.getLocations = (req, res) => {
+    //
+}
