@@ -18,7 +18,6 @@ exports.createLocation = (req, res) => {
     const {province, city, address, lot_size, lot_type} = req.body;
     var coordinates = []
     console.log(req.user._id)
-    // console.log(geolocation(address));
     geolocation(address).then((newCoords) => {
         coordinates = [newCoords[0].latitude, newCoords[0].longitude]
         const location = new Location({province, city, address, lot_size, lot_type, owner_id: req.user._id, geolocation: {coordinates}});
