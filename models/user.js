@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         lowercase: true
     },
+    location_ids: {
+        type: [String],
+    },
     hashed_password: {
         type: String,
         required: true,
