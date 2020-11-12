@@ -109,7 +109,8 @@ exports.signin = (req, res) => {
 
 //adds req.user._id property to the request object
 exports.requireSignin = expressJwt({
-    secret: process.env.JWT_SECRET
+    secret: process.env.JWT_SECRET,
+    algorithms: ['sha1', 'RS256', 'HS256'],
 });
 
 exports.adminMiddleware = (req, res, next) => {
