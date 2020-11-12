@@ -17,6 +17,7 @@ const path = require("path");
 // })
 // .then(() => console.log('DB connected'))
 // .catch(err => console.log('DB connection error: ', err))
+//quick test
 
 
 //import routes
