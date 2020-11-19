@@ -39,6 +39,9 @@ const locationSchema = new mongoose.Schema({
             required: true
           }
     }
-}, {timestamps: true});
+}, { timestamps: true });
+
+//Indexing to be able to query locations
+locationSchema.index({ geolocation: "2dsphere" });
 
 module.exports = mongoose.model('Location', locationSchema)

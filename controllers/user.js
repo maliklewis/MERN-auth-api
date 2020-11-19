@@ -53,3 +53,23 @@ exports.update = (req, res) => {
       });
   });
 };
+
+exports.updateLocation = (userId, locationId) => {
+  User.findOne({ _id: userId }, (err, user) => {
+    if (err || !user) {
+      return err;
+    }
+    if (locationId) {
+      user.locations.insertOne(locationId);
+    }
+    user.save((err, updatedUser) => {
+      if (err) {
+        console.log("USER UPDATE ERROR", err);
+        return err;
+      }
+      updatedUser.hashed_password = undefined;
+      updatedUser.salt = undefined;
+      return updatedUser;
+    });
+  })
+}

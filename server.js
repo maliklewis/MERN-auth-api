@@ -3,21 +3,20 @@ const app = express();
 const port = process.env.PORT || 8000;
 const morgan = require('morgan');
 const cors = require('cors');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const path = require("path");
 
 //db connection
-// mongoose.connect('mongodb://127.0.0.1:27017/mernauth', {
-//     useNewUrlParser: true,
-//     useFindAndModify: false,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true
-// })
-// .then(() => console.log('DB connected'))
-// .catch(err => console.log('DB connection error: ', err))
-//quick test
+mongoose.connect('mongodb://127.0.0.1:27017/mernauth', {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+})
+.then(() => console.log('DB connected'))
+.catch(err => console.log('DB connection error: ', err))
 
 
 //import routes

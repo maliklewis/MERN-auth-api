@@ -33,7 +33,7 @@ exports.signup = (req, res) => {
         }
         sgMail.send(emailData)
         .then(sent => {
-            //console.log('SIGNUP EMAIL SENT', sent)
+            console.log('SIGNUP EMAIL SENT', sent)
             res.json({
                 message: `Email has been sent to ${email}. Follow the instructions to activate your account`
             })
@@ -111,7 +111,7 @@ exports.signin = (req, res) => {
 //adds req.user._id property to the request object
 exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET,
-    algorithms: ['sha1', 'RS256', 'HS256'],
+    //algorithms: ['sha1', 'RS256', 'HS256'],
 });
 
 exports.adminMiddleware = (req, res, next) => {
@@ -262,47 +262,3 @@ exports.resetPassword = (req, res) => {
         });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// exports.signup = (req, res) => {
-//     //console.log('REQ BODY ON SIGNUP', req.body);
-//     const {name, email, password} = req.body
-
-//     User.findOne({email}).exec((err, user) => {
-//         if (user){
-//             return res.status(400).json({
-//                 error: 'Email already exists'
-//             });
-//         }
-//     })
-//     let newUser = new User({name, email, password})
-    
-//     newUser.save((err, success) => {
-//         if (err) {
-//             console.log('signup error', err)
-//             return res.status(400).json({
-//                 error: err
-//             });
-//         }
-//         res.json({
-//             message: 'singup successful! Please sing in',
-//             user: {
-//                 name: newUser.name, 
-//                 email: newUser.email
-//             }
-//         });
-//     });
-// };

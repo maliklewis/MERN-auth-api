@@ -25,5 +25,6 @@ router.put('/reset-password',resetPasswordValidator, runValidation, resetPasswor
 
 //google and facebook
 router.post('/google-login', googleLogin)
+//TODO: add facebook validation now that you have an account again
 
 module.exports = router;
